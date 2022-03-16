@@ -86,6 +86,6 @@ resource "aws_flow_log" "this" {
   iam_role_arn             = module.this_role.role.arn
   traffic_type             = "ALL"
   vpc_id                   = aws_vpc.this.id
-  max_aggregation_interval = 600
+  max_aggregation_interval = 60
   tags                     = merge(var.tags)
 }
