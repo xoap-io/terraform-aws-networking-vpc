@@ -2,7 +2,7 @@
 name: Linting files
 on:
   pull_request:
-    branches: [main, master]
+    types: [opened, reopened, edited]
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
