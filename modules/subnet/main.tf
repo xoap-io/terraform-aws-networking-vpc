@@ -62,7 +62,7 @@ resource "aws_route" "this" {
     create = "5m"
   }
 }
-resource "aws_route" "this" {
+resource "aws_route" "this_v6" {
   for_each                    = var.operation_mode != "not_routed" && var.enable_ipv6 ? [1] : []
   route_table_id              = aws_route_table.this.id
   destination_ipv6_cidr_block = "::/0"

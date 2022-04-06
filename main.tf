@@ -63,7 +63,7 @@ module "this_cloudwatch" {
   retention_days = 7
 }
 module "this_role" {
-  source             = "git::github.com/xoap-io/terraform-aws-iam-role?ref=v0.1.1"
+  source             = "git::github.com/xoap-io/terraform-aws-iam-role?ref=v0.1.6"
   context            = var.context
   allow_logging      = true
   allow_xray         = false

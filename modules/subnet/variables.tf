@@ -11,7 +11,7 @@ variable "operation_mode" {
   description = "Operation mode of the subnets. Can be nat, not_routed or public"
   validation {
     condition     = contains(["nat", "not_routed", "public"], var.operation_mode)
-    error_message = "Valid values for var: operation_mode are nat, not_routed, public"
+    error_message = "Valid values for var: operation_mode are nat, not_routed, public."
   }
 }
 variable "enable_ipv6" {
