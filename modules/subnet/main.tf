@@ -43,7 +43,7 @@ resource "aws_eip" "this" {
 
 resource "aws_nat_gateway" "this" {
   for_each      = var.operation_mode == "nat" ? [1] : []
-  allocation_id = aws_eip.this.allocation_id
+  allocation_id = aws_eip.this[each.key].allocation_id
   subnet_id     = ""
   tags = merge(var.tags,
     {

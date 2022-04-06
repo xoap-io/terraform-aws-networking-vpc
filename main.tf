@@ -18,7 +18,7 @@ resource "aws_vpc" "this" {
   })
 }
 resource "aws_default_security_group" "this" {
-  vpc_id = aws_vpc.this[0].id
+  vpc_id = aws_vpc.this.id
   tags = merge(var.tags,
     {
       "Name" = module.this_label.id
@@ -63,7 +63,7 @@ module "this_cloudwatch" {
   retention_days = 7
 }
 module "this_role" {
-  source             = "git::github.com/xoap-io/terraform-aws-iam-role?ref=v0.1.6"
+  source             = "git::github.com/xoap-io/terraform-aws-iam-role?ref=v0.1.7"
   context            = var.context
   allow_logging      = true
   allow_xray         = false
