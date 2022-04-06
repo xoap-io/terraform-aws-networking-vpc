@@ -119,7 +119,7 @@ Please be aware that this is mainly a copy operation which means all your curren
 |------|--------|---------|
 | <a name="module_this_cloudwatch"></a> [this\_cloudwatch](#module\_this\_cloudwatch) | git::github.com/xoap-io/terraform-aws-security-cloudwatch-group | v0.1.0 |
 | <a name="module_this_label"></a> [this\_label](#module\_this\_label) | git::github.com/xoap-io/terraform-aws-misc-label | v0.1.0 |
-| <a name="module_this_role"></a> [this\_role](#module\_this\_role) | git::github.com/xoap-io/terraform-aws-iam-role | v0.1.6 |
+| <a name="module_this_role"></a> [this\_role](#module\_this\_role) | git::github.com/xoap-io/terraform-aws-iam-role | v0.1.7 |
 | <a name="module_this_subnets"></a> [this\_subnets](#module\_this\_subnets) | ./modules/subnet | n/a |
 
 ## Resources
