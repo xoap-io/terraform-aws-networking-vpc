@@ -23,7 +23,7 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DISABLE: COPYPASTE,SPELL
-          DISABLE_LINTERS: TERRAFORM_TERRASCAN
+          DISABLE_LINTERS: TERRAFORM_TERRASCAN, TERRAFORM_CHECKOV
       - name: Archive production artifacts
         if: ${{ success() }} || ${{ failure() }}
         uses: actions/upload-artifact@v2
