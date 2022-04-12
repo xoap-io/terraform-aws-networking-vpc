@@ -18,17 +18,6 @@ module "this_label_igw" {
 }
 
 
-resource "aws_route" "this" {
-  count                  = var.operation_mode != "not_routed" && var.operation_mode != "database" ? 1 : 0
-  route_table_id         = aws_route_table.this.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = var.operation_mode == "public" ? var.internet_gateway_id : null
-  nat_gateway_id         = var.operation_mode == "nat" ? var.nat_gateway_id : null
-  timeouts {
-    create = "5m"
-  }
-}
-
 resource "aws_route" "transit" {
   for_each               = var.transit_gateway_id != "" ? toset(var.transit_gateway_routes) : []
   route_table_id         = aws_route_table.this.id

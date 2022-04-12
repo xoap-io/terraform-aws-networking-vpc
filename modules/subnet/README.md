@@ -41,7 +41,6 @@ No requirements.
 | Name | Type |
 |------|------|
 | [aws_db_subnet_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) | resource |
-| [aws_route.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.transit](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route_table.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
 | [aws_route_table_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
@@ -53,9 +52,7 @@ No requirements.
 |------|-------------|------|---------|:--------:|
 | <a name="input_context"></a> [context](#input\_context) | Default context for naming and tagging purpose | <pre>object({<br>    organization = string<br>    environment  = string<br>    account      = string<br>    product      = string<br>    tags         = map(string)<br>  })</pre> | n/a | yes |
 | <a name="input_enable_ipv6"></a> [enable\_ipv6](#input\_enable\_ipv6) | Adds support for ipv6 | `bool` | n/a | yes |
-| <a name="input_internet_gateway_id"></a> [internet\_gateway\_id](#input\_internet\_gateway\_id) | Id of the internet gateway to attach to the subnets | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Base name of the subnets to create | `string` | n/a | yes |
-| <a name="input_nat_gateway_id"></a> [nat\_gateway\_id](#input\_nat\_gateway\_id) | Id of the nat gateway to attach to the subnets | `string` | n/a | yes |
 | <a name="input_operation_mode"></a> [operation\_mode](#input\_operation\_mode) | Operation mode of the subnets. Can be nat, not\_routed or public | `string` | n/a | yes |
 | <a name="input_subnet_mappings"></a> [subnet\_mappings](#input\_subnet\_mappings) | Mapping for subnet creation | <pre>map(object({<br>    cidr                 = string<br>    availability_zone_id = string<br>    public_ip_on_launch  = bool<br>    tags                 = map(string)<br>  }))</pre> | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | A list of tags to add | `map(string)` | `{}` | no |
