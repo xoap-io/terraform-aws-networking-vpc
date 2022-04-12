@@ -10,9 +10,26 @@ variable "operation_mode" {
   type        = string
   description = "Operation mode of the subnets. Can be nat, not_routed or public"
   validation {
-    condition     = contains(["nat", "not_routed", "public"], var.operation_mode)
+    condition     = contains(["nat", "not_routed", "public", "database"], var.operation_mode)
     error_message = "Valid values for var: operation_mode are nat, not_routed, public."
   }
+}
+variable "nat_gateway_id" {
+  type        = string
+  description = "Id of the nat gateway to attach to the subnets"
+}
+variable "internet_gateway_id" {
+  type        = string
+  description = "Id of the internet gateway to attach to the subnets"
+}
+variable "transit_gateway_id" {
+  type        = string
+  description = "Id of the transit gateway to attach to the subnets"
+}
+variable "transit_gateway_routes" {
+  type        = list(string)
+  default     = []
+  description = "List of transit gateway routes to attach to the subnets"
 }
 variable "enable_ipv6" {
   type        = bool
