@@ -56,8 +56,6 @@ module "this_subnets" {
   vpc_id                 = aws_vpc.this.id
   transit_gateway_id     = var.transit_gateway_id
   transit_gateway_routes = concat(var.transit_gateway_routes, each.value.transit_gateway_routes)
-  internet_gateway_id    = aws_internet_gateway.this.id
-  nat_gateway_id         = join("", aws_nat_gateway.this.*.id)
   depends_on             = [aws_vpc.this]
 }
 
@@ -125,4 +123,23 @@ resource "aws_nat_gateway" "this" {
     }
   )
   depends_on = [aws_internet_gateway.this]
+}
+
+resource "aws_route" "igw" {
+  for_each               = { for k, v in var.subnets : k => {} if v.operation_mode == "public" }
+  route_table_id         = module.this_subnets[each.key].route_table.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.this.id
+  timeouts {
+    create = "5m"
+  }
+}
+resource "aws_route" "nat" {
+  for_each               = { for k, v in var.subnets : k => {} if v.operation_mode == "nat" && var.config.enable_nat_gateway }
+  route_table_id         = module.this_subnets[each.key].route_table.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = join("", aws_nat_gateway.this.*.id)
+  timeouts {
+    create = "5m"
+  }
 }
