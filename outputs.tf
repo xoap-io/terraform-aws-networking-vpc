@@ -18,15 +18,45 @@ output "subnets" {
   }
   description = "map of output from resource aws_subnet according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet"
 }
-output "internet_gateways" {
-  value = {
-    for k, v in module.this_subnets : k => v.internet_gateway
-  }
-  description = "map of output from resource aws_internet_gateway according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway"
+output "subnet_cidrs" {
+  value = distinct(flatten([
+    for k, v in module.this_subnets : [
+      for sn in v.subnets : sn.cidr_block
+    ]
+  ]))
+  description = "list of all associated subnet cidrs"
 }
-output "nat_gateways" {
+output "subnet_ids" {
   value = {
-    for k, v in module.this_subnets : k => v.nat_gateway
+    for k, v in module.this_subnets : k => v.all_subnet_ids
   }
-  description = "map of output from resource aws_nat_gateway according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway"
+  description = "map of output from resource aws_subnet according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet"
+}
+output "internet_gateway" {
+  value       = aws_internet_gateway.this
+  description = "Output from resource aws_internet_gateway according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway"
+}
+output "nat_gateway" {
+  value       = aws_nat_gateway.this
+  description = "Output from resource aws_nat_gateway according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway"
+}
+
+
+output "aws_ec2_transit_gateway_vpc_attachment" {
+  value       = aws_ec2_transit_gateway_vpc_attachment.this
+  description = "output from resource aws_ec2_transit_gateway_vpc_attachment according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway_vpc_attachment"
+}
+
+
+output "transit_gateway_routes" {
+  value = var.transit_gateway_id != "" ? distinct(flatten([
+    for k, v in module.this_subnets : [
+      for sn in v.subnets : {
+        route       = sn.cidr_block
+        attachement = join("", aws_ec2_transit_gateway_vpc_attachment.this.*.id, )
+      }
+    ]
+  ])) : []
+
+  description = "map of output from resource aws_subnet according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet"
 }
