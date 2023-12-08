@@ -8,7 +8,6 @@ variable "config" {
     cidr                 = string
     dns_support          = bool
     ipv6_support         = bool
-    classic_link_support = bool
     enable_nat_gateway   = bool
     nat_gateway_subnet   = string
   })

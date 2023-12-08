@@ -1,3 +1,4 @@
+data "aws_region" "this" {}
 module "this_label" {
   source     = "git::github.com/xoap-io/terraform-aws-misc-label?ref=v0.1.0"
   context    = var.context
@@ -8,8 +9,6 @@ resource "aws_vpc" "this" {
   cidr_block                       = var.config.cidr
   enable_dns_hostnames             = var.config.dns_support
   enable_dns_support               = var.config.dns_support
-  enable_classiclink               = var.config.classic_link_support
-  enable_classiclink_dns_support   = var.config.classic_link_support
   assign_generated_ipv6_cidr_block = var.config.ipv6_support
 
   tags = merge(var.tags,
@@ -142,4 +141,56 @@ resource "aws_route" "nat" {
   timeouts {
     create = "5m"
   }
+}
+module "sg_endpoints" {
+  source             = "git::github.com/xoap-io/terraform-aws-compute-security-group.git"
+  context            = var.context
+  name               = "aws_endpoints"
+  description        = "Security group for aws endpoints in vpc ${aws_vpc.this.id}"
+  allow_self_ingress = true
+  vpc_id             = aws_vpc.this.id
+  ingress = {
+    ingress = {
+      from        = 0
+      to          = 0
+      protocol    = "-1"
+      cidr_blocks = [aws_vpc.this.cidr_block]
+    }
+  }
+  egress = {
+    allow_any = {
+      from        = 0
+      to          = 0
+      protocol    = "-1"
+      cidr_blocks = [aws_vpc.this.cidr_block]
+    }
+  }
+}
+locals {
+  routes_services = toset([ "ecr.dkr", "ecr.api" ])
+  all_non_public_subnet_ids = setproduct(flatten([for k, v in module.this_subnets : v.all_subnet_ids if v.operation_mode != "public" ]), [for k,v in aws_vpc_endpoint.this : v.id])
+}
+resource "aws_vpc_endpoint" "this" {
+  for_each = local.routes_services
+  private_dns_enabled = true
+  service_name        = join(".", ["com.amazonaws", data.aws_region.this.name, each.key])
+  vpc_endpoint_type   = "Interface"
+  vpc_id              = aws_vpc.this.id
+
+  security_group_ids = [
+    module.sg_endpoints.aws_security_group.id
+  ]
+  subnet_ids = module.this_subnets["public"].all_subnet_ids
+}
+resource aws_vpc_endpoint "s3"{
+    vpc_id       = aws_vpc.this.id
+    service_name = "com.amazonaws.${data.aws_region.this.name}.s3"
+    vpc_endpoint_type   = "Gateway"
+    route_table_ids = [for k, v in module.this_subnets : v.route_table.id if v.operation_mode != "public" ]
+}
+resource aws_vpc_endpoint "dynamodb"{
+    vpc_id       = aws_vpc.this.id
+    service_name = "com.amazonaws.${data.aws_region.this.name}.dynamodb"
+    vpc_endpoint_type   = "Gateway"
+  route_table_ids = [for k, v in module.this_subnets : v.route_table.id if v.operation_mode != "public" ]
 }
