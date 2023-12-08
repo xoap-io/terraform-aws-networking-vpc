@@ -60,3 +60,8 @@ output "transit_gateway_routes" {
 
   description = "map of output from resource aws_subnet according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet"
 }
+
+
+output "temp" {
+  value = local.all_non_public_subnet_ids
+}
