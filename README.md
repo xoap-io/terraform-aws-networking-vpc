@@ -117,6 +117,7 @@ Please be aware that this is mainly a copy operation which means all your curren
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_sg_endpoints"></a> [sg\_endpoints](#module\_sg\_endpoints) | git::github.com/xoap-io/terraform-aws-compute-security-group.git | n/a |
 | <a name="module_this_label"></a> [this\_label](#module\_this\_label) | git::github.com/xoap-io/terraform-aws-misc-label | v0.1.0 |
 | <a name="module_this_subnets"></a> [this\_subnets](#module\_this\_subnets) | ./modules/subnet | n/a |
 
@@ -137,13 +138,17 @@ Please be aware that this is mainly a copy operation which means all your curren
 | [aws_vpc.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) | resource |
 | [aws_vpc_dhcp_options.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_dhcp_options) | resource |
 | [aws_vpc_dhcp_options_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_dhcp_options_association) | resource |
+| [aws_vpc_endpoint.dynamodb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
+| [aws_vpc_endpoint.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
+| [aws_vpc_endpoint.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
 | [aws_organizations_organization.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organization) | data source |
+| [aws_region.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_config"></a> [config](#input\_config) | Configuration parameters for the vpc. Per default the vpc is provisioned with the subnet cidr 10.10.0.0.0/16 and full dns support | <pre>object({<br>    cidr                 = string<br>    dns_support          = bool<br>    ipv6_support         = bool<br>    classic_link_support = bool<br>    enable_nat_gateway   = bool<br>    nat_gateway_subnet   = string<br>  })</pre> | <pre>{<br>  "cidr": "10.10.0.0/16",<br>  "classic_link_support": false,<br>  "dns_support": true,<br>  "enable_nat_gateway": true,<br>  "ipv6_support": false,<br>  "nat_gateway_subnet": "public"<br>}</pre> | no |
+| <a name="input_config"></a> [config](#input\_config) | Configuration parameters for the vpc. Per default the vpc is provisioned with the subnet cidr 10.10.0.0.0/16 and full dns support | <pre>object({<br>    cidr               = string<br>    dns_support        = bool<br>    ipv6_support       = bool<br>    enable_nat_gateway = bool<br>    nat_gateway_subnet = string<br>  })</pre> | <pre>{<br>  "cidr": "10.10.0.0/16",<br>  "classic_link_support": false,<br>  "dns_support": true,<br>  "enable_nat_gateway": true,<br>  "ipv6_support": false,<br>  "nat_gateway_subnet": "public"<br>}</pre> | no |
 | <a name="input_context"></a> [context](#input\_context) | Default context for naming and tagging purpose | <pre>object({<br>    organization = string<br>    environment  = string<br>    account      = string<br>    product      = string<br>    tags         = map(string)<br>  })</pre> | n/a | yes |
 | <a name="input_dhcp_options"></a> [dhcp\_options](#input\_dhcp\_options) | Configuration parameters for dhcp. Per default this features are disabled | <pre>object({<br>    domain_name          = string<br>    domain_name_servers  = list(string)<br>    ntp_servers          = list(string)<br>    netbios_name_servers = list(string)<br>    netbios_node_type    = string<br>  })</pre> | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the vpc to create | `string` | n/a | yes |
@@ -166,6 +171,7 @@ Please be aware that this is mainly a copy operation which means all your curren
 | <a name="output_subnet_cidrs"></a> [subnet\_cidrs](#output\_subnet\_cidrs) | list of all associated subnet cidrs |
 | <a name="output_subnet_ids"></a> [subnet\_ids](#output\_subnet\_ids) | map of output from resource aws\_subnet according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet |
 | <a name="output_subnets"></a> [subnets](#output\_subnets) | map of output from resource aws\_subnet according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet |
+| <a name="output_temp"></a> [temp](#output\_temp) | n/a |
 | <a name="output_transit_gateway_routes"></a> [transit\_gateway\_routes](#output\_transit\_gateway\_routes) | map of output from resource aws\_subnet according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet |
 | <a name="output_vpc"></a> [vpc](#output\_vpc) | Map of  aws\_vpc according to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
