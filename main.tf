@@ -167,11 +167,11 @@ module "sg_endpoints" {
   }
 }
 locals {
-  routes_services = toset([ "ecr.dkr", "ecr.api" ])
-  all_non_public_subnet_ids = setproduct(flatten([for k, v in module.this_subnets : v.all_subnet_ids if v.operation_mode != "public" ]), [for k,v in aws_vpc_endpoint.this : v.id])
+  routes_services           = toset(["ecr.dkr", "ecr.api"])
+  all_non_public_subnet_ids = setproduct(flatten([for k, v in module.this_subnets : v.all_subnet_ids if v.operation_mode != "public"]), [for k, v in aws_vpc_endpoint.this : v.id])
 }
 resource "aws_vpc_endpoint" "this" {
-  for_each = local.routes_services
+  for_each            = local.routes_services
   private_dns_enabled = true
   service_name        = join(".", ["com.amazonaws", data.aws_region.this.name, each.key])
   vpc_endpoint_type   = "Interface"
@@ -182,15 +182,15 @@ resource "aws_vpc_endpoint" "this" {
   ]
   subnet_ids = module.this_subnets["public"].all_subnet_ids
 }
-resource aws_vpc_endpoint "s3"{
-    vpc_id       = aws_vpc.this.id
-    service_name = "com.amazonaws.${data.aws_region.this.name}.s3"
-    vpc_endpoint_type   = "Gateway"
-    route_table_ids = [for k, v in module.this_subnets : v.route_table.id if v.operation_mode != "public" ]
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id            = aws_vpc.this.id
+  service_name      = "com.amazonaws.${data.aws_region.this.name}.s3"
+  vpc_endpoint_type = "Gateway"
+  route_table_ids   = [for k, v in module.this_subnets : v.route_table.id if v.operation_mode != "public"]
 }
-resource aws_vpc_endpoint "dynamodb"{
-    vpc_id       = aws_vpc.this.id
-    service_name = "com.amazonaws.${data.aws_region.this.name}.dynamodb"
-    vpc_endpoint_type   = "Gateway"
-  route_table_ids = [for k, v in module.this_subnets : v.route_table.id if v.operation_mode != "public" ]
+resource "aws_vpc_endpoint" "dynamodb" {
+  vpc_id            = aws_vpc.this.id
+  service_name      = "com.amazonaws.${data.aws_region.this.name}.dynamodb"
+  vpc_endpoint_type = "Gateway"
+  route_table_ids   = [for k, v in module.this_subnets : v.route_table.id if v.operation_mode != "public"]
 }

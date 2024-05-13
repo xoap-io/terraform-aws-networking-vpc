@@ -5,11 +5,11 @@ variable "name" {
 
 variable "config" {
   type = object({
-    cidr                 = string
-    dns_support          = bool
-    ipv6_support         = bool
-    enable_nat_gateway   = bool
-    nat_gateway_subnet   = string
+    cidr               = string
+    dns_support        = bool
+    ipv6_support       = bool
+    enable_nat_gateway = bool
+    nat_gateway_subnet = string
   })
   default = {
     cidr                 = "10.10.0.0/16"
